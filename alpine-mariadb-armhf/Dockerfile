@@ -18,6 +18,16 @@ LABEL maintainer="Dominic Taylor <dominic@yobasystems.co.uk>" \
     org.opencontainers.image.revision=$VCS_REF \
     org.opencontainers.image.created=$BUILD_DATE
 
+# Install base packages
+RUN apk update
+RUN apk upgrade
+RUN apk add ca-certificates && update-ca-certificates
+# Change TimeZone
+RUN apk add --update tzdata
+ENV TZ=America/Los_Angeles
+# Clean APK cache
+RUN rm -rf /var/cache/apk/*
+
 RUN apk add --no-cache mariadb mariadb-client mariadb-server-utils pwgen && \
     rm -f /var/cache/apk/*
 
